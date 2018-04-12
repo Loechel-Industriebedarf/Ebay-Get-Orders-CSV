@@ -6,19 +6,17 @@
 <?php require_once('get-common/eBaySession.php')  //include session file for curl operations ?>
 <?php
 //SiteID must also be set in the Request's XML
-//SiteID = 0  (US) - UK = 3, Canada = 2, Australia = 15, ....
+//SiteID = 0  (US) - UK = 3, Canada = 2, Australia = 15, Germany = 77 ....
 //SiteID Indicates the eBay site to associate the call with
 $siteID = 77;
 //the call being made:
 $verb = 'GetOrders';
 
-//Time with respect to GMT
+//Time with respect to GMT -> Ebay seems to work in GMT timezone. So, yeah.
 //by default retreive orders in last 30 minutes
-date_default_timezone_set('Europe/Berlin');
-
-$CreateTimeFrom = gmdate("Y-m-d\TH:i:s", time() + 1800); //current time minus 30 minutes
-$CreateTimeTo = gmdate("Y-m-d\TH:i:s", time() + 3600);
-$now = $CreateTimeTo;
+$CreateTimeFrom = gmdate("Y-m-d\TH:i:s", time() - 1800); //current time minus 30 minutes
+$CreateTimeTo = gmdate("Y-m-d\TH:i:s", time());
+$now = gmdate("Y-m-d\TH:i:s", time() + 3600);
 
 
 //If you want to hard code From and To timings, Follow the below format in "GMT".

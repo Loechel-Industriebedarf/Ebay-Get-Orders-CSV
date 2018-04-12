@@ -29,11 +29,11 @@
                 if ($transactions) {
                     // iterate through each transaction for the order
                     foreach ($transactions->Transaction as $transaction) {						
-						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transactions[0]->Buyer->Email, $shippingAddress->Street1, $shippingAddress->Street2, 
+						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $shippingAddress->Street1, $shippingAddress->Street2, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $transaction->QuantityPurchased,
 						$transaction->TransactionPrice, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
-						'PayPal', $transaction->TransactionID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
+						$order->CheckoutStatus->PaymentMethod, $transaction->TransactionID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, '', '', '', '',
 						'', '', '', '', 'Nein', $externalTransaction->FeeOrCreditAmount));
                     }
@@ -47,8 +47,8 @@
 
 		$fp = fopen('ebayOrder.csv', 'w');
 
-		foreach ($list as $fields) {
-			fputcsv($fp, $fields, ';');
+		for ($i = 0; $i < count($list); $i++) {
+			fputcsv($fp, $list[$i], ';');
 		}
 
 		fclose($fp);
