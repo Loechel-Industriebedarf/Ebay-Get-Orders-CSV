@@ -52,6 +52,11 @@
 		}
 
 		fclose($fp);
+		
+		
+		$fp = fopen('last.txt', 'w+');
+		fwrite($fp, $CreateTimeTo);
+		fclose($fp);
 	}
 		
 ?>
