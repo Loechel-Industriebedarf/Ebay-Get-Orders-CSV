@@ -12,7 +12,7 @@
 
 
 	if ($entries == 0) {
-		echo $now." NO new orders.";
+		echo $now." NO new orders from " . $CreateTimeFrom . " to " . $CreateTimeTo;
 	}
 	else{
 	$orders = $response->OrderArray->Order;
@@ -31,21 +31,28 @@
                     foreach ($transactions->Transaction as $transaction) {						
 						$title = $transaction->Item->Title;
 						$quantity = $transaction->QuantityPurchased;
+						$price = $order->AmountPaid;
+						$fees = $externalTransaction->FeeOrCreditAmount;
 						//Packs with multiple items?
-						if(strpos($title, 'er Pack')){
-							$strpostitle = substr($title,0,strpos($title,"er Pack")); //Cut everything after "er Pack"
+						if(strpos(strtolower($title), 'er pack')){
+							$strpostitle = substr($title,0,strpos(strtolower($title),"er pack")); //Cut everything after "er Pack"
 							$lastspace = strrpos($strpostitle, ' '); //Search for last space
-							$strpostitle = substr($strpostitle, $lastspace, strlen($strpostitle)); //Cut everything before last space
-							$quantity *= intval($strpostitle);
+							if($lastspace > 0){
+								$strpostitle = substr($strpostitle, $lastspace, strlen($strpostitle)); //Cut everything before last space
+							}	
+							$quantity *= intval($strpostitle); //Get "real" quantity
+							$price = doubleval($price) / doubleval($strpostitle); //Get "real" price
+							$fees = doubleval($fees) / doubleval($strpostitle) + 0.01; //Get "real" fees
 						}
+						
 					
 						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $shippingAddress->Street1, $shippingAddress->Street2, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
-						$transaction->TransactionPrice, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
+						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $price,
 						$order->CheckoutStatus->PaymentMethod, $transaction->TransactionID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, '', '', '', '',
-						'', '', '', '', 'Nein', $externalTransaction->FeeOrCreditAmount));
+						'', '', '', '', 'Nein', $fees));
                     }
                 }
         }
