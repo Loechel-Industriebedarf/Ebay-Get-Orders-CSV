@@ -29,9 +29,19 @@
                 if ($transactions) {
                     // iterate through each transaction for the order
                     foreach ($transactions->Transaction as $transaction) {						
+						$title = $transaction->Item->Title;
+						$quantity = $transaction->QuantityPurchased;
+						//Packs with multiple items?
+						if(strpos($title, 'er Pack')){
+							$strpostitle = substr($title,0,strpos($title,"er Pack")); //Cut everything after "er Pack"
+							$lastspace = strrpos($strpostitle, ' '); //Search for last space
+							$strpostitle = substr($strpostitle, $lastspace, strlen($strpostitle)); //Cut everything before last space
+							$quantity *= intval($strpostitle);
+						}
+					
 						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $shippingAddress->Street1, $shippingAddress->Street2, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
-						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $transaction->QuantityPurchased,
+						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
 						$transaction->TransactionPrice, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
 						$order->CheckoutStatus->PaymentMethod, $transaction->TransactionID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, '', '', '', '',
