@@ -28,10 +28,10 @@
 				$transactions = $order->TransactionArray;
                 if ($transactions) {
                     // iterate through each transaction for the order
-                    foreach ($transactions->Transaction as $transaction) {						
+                    foreach ($transactions->Transaction as $transaction) {	
 						$title = $transaction->Item->Title;
 						$quantity = $transaction->QuantityPurchased;
-						$price = $order->AmountPaid;
+						$price = $transaction->TransactionPrice;
 						$fees = $externalTransaction->FeeOrCreditAmount;
 						//Packs with multiple items?
 						if(strpos(strtolower($title), 'er pack')){
@@ -42,14 +42,14 @@
 							}	
 							$quantity *= intval($strpostitle); //Get "real" quantity
 							$price = doubleval($price) / doubleval($strpostitle); //Get "real" price
-							$fees = doubleval($fees) / doubleval($strpostitle) + 0.01; //Get "real" fees
+							$fees = (doubleval($fees)-0.25) / doubleval($strpostitle) + 0.01; //Get "real" fees
 						}
 						
 					
 						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $shippingAddress->Street1, $shippingAddress->Street2, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
-						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $price,
+						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
 						$order->CheckoutStatus->PaymentMethod, $transaction->TransactionID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, '', '', '', '',
 						'', '', '', '', 'Nein', $fees));
