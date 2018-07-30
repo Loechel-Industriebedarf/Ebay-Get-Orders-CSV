@@ -24,6 +24,8 @@
 				$shippingAddress = $order->ShippingAddress;
 				$ShippingServiceSelected = $order->ShippingServiceSelected;
 				$externalTransaction = $order->ExternalTransaction;
+				$checkoutmessage = $order->BuyerCheckoutMessage;
+				$checkoutmessage = preg_replace('/\s+/', ' ', trim($checkoutmessage));
 				
 				$transactions = $order->TransactionArray;
                 if ($transactions) {
@@ -50,8 +52,8 @@
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
 						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
-						$order->CheckoutStatus->PaymentMethod, $transaction->TransactionID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
-						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, '', '', '', '',
+						$order->CheckoutStatus->PaymentMethod, $order->ExternalTransaction->ExternalTransactionID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
+						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, $checkoutmessage, '', '', '',
 						'', '', '', '', 'Nein', $fees));
                     }
                 }

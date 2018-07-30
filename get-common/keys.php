@@ -10,13 +10,13 @@
     $compatabilityLevel = 717;    // eBay API version
     
     if ($production) {
-        $devID = 'xxxxxxxxxx';   // these prod keys are different from sandbox keys
-        $appID = 'xxxxxxxxxxxx';
-        $certID = 'xxxxxxxxxx';
+        $devID = 'xxxxx';   // these prod keys are different from sandbox keys
+        $appID = 'xxxxx';
+        $certID = 'xxxxx';
         //set the Server to use (Sandbox or Production)
         $serverUrl = 'https://api.ebay.com/ws/api.dll';      // server URL different for prod and sandbox
         //the token representing the eBay user to assign the call with
-        $userToken = 'xxxxxxxxxxx';          
+        $userToken = 'xxxxx';          
     } else {  
         // sandbox (test) environment
         $devID = 'xxxxxxxx';   // these SB keys are different from prod keys
