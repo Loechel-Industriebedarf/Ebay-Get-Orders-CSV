@@ -25,7 +25,7 @@
 				$ShippingServiceSelected = $order->ShippingServiceSelected;
 				$externalTransaction = $order->ExternalTransaction;
 				$checkoutmessage = $order->BuyerCheckoutMessage;
-				$checkoutmessage = preg_replace('/\s+/', ' ', trim($checkoutmessage));
+				$checkoutmessage = preg_replace('/\s+/', ' ', trim($checkoutmessage)); //Our ERP-system has problems with \r\n in messages. This removes them.
 				
 				$transactions = $order->TransactionArray;
                 if ($transactions) {
@@ -35,6 +35,7 @@
 						$quantity = $transaction->QuantityPurchased;
 						$price = $transaction->TransactionPrice;
 						$fees = $externalTransaction->FeeOrCreditAmount;
+						$paymentID = $order->ExternalTransaction->ExternalTransactionID;
 						//Packs with multiple items?
 						if(strpos(strtolower($title), 'er pack')){
 							$strpostitle = substr($title,0,strpos(strtolower($title),"er pack")); //Cut everything after "er Pack"
@@ -46,13 +47,21 @@
 							$price = doubleval($price) / doubleval($strpostitle); //Get "real" price
 							$fees = (doubleval($fees)-0.25) / doubleval($strpostitle) + 0.01; //Get "real" fees
 						}
+						if($quantity > 1){
+							$fees = 0;
+						}
+						
+						//On some transactions the paymentID gets set to "SIS". We don't want this.
+						if($paymentID == "SIS"){
+							$paymentID = "";
+						}
 						
 					
 						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $shippingAddress->Street1, $shippingAddress->Street2, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
 						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
-						$order->CheckoutStatus->PaymentMethod, $order->ExternalTransaction->ExternalTransactionID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
+						$order->CheckoutStatus->PaymentMethod, $paymentID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, $checkoutmessage, '', '', '',
 						'', '', '', '', 'Nein', $fees, $shippingAddress->Country));
                     }

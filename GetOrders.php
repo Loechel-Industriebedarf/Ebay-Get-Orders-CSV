@@ -14,7 +14,7 @@ $verb = 'GetOrders';
 
 //Time with respect to GMT -> Ebay seems to work in GMT timezone. So, yeah.
 //by default retreive orders in last 30 minutes
-$CreateTimeFrom = file_get_contents('last.txt'); //Last time a file was read successfully
+$CreateTimeFrom = file_get_contents('last.txt');
 $CreateTimeTo = gmdate("Y-m-d\TH:i:s", time());
 $now = gmdate("Y-m-d\TH:i:s", time() + 7200);
 
