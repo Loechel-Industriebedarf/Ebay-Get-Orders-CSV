@@ -1,4 +1,12 @@
 <?php
+	$csvPath = "../ebayOrder.csv";
+	
+	//Checks, if the csv already exists
+	if(file_exists($csvPath)){
+		echo $now." CSV file was not processed yet!";
+		exit();
+	}
+
 	//Stores all information
 	$list = array ( );
 	//Headline
@@ -21,13 +29,13 @@
 		echo $now." New orders get parsed.";
 		
         foreach ($orders as $order) {
-				$shippingAddress = $order->ShippingAddress;
-				$ShippingServiceSelected = $order->ShippingServiceSelected;
-				$externalTransaction = $order->ExternalTransaction;
-				$checkoutmessage = $order->BuyerCheckoutMessage;
-				$checkoutmessage = preg_replace('/\s+/', ' ', trim($checkoutmessage)); //Our ERP-system has problems with \r\n in messages. This removes them.
-				
-				$transactions = $order->TransactionArray;
+			$shippingAddress = $order->ShippingAddress;
+			$ShippingServiceSelected = $order->ShippingServiceSelected;
+			$externalTransaction = $order->ExternalTransaction;
+			$checkoutmessage = $order->BuyerCheckoutMessage;
+			$checkoutmessage = preg_replace('/\s+/', ' ', trim($checkoutmessage)); //Our ERP-system has problems with \r\n in messages. This removes them.
+			
+			$transactions = $order->TransactionArray;
                 if ($transactions) {
                     // iterate through each transaction for the order
 					$i = 0;
@@ -57,8 +65,7 @@
 						if($paymentID == "SIS"){
 							$paymentID = "";
 						}
-						
-					
+											
 						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $shippingAddress->Street1, $shippingAddress->Street2, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
@@ -75,7 +82,7 @@
 	
 		//Write the transactions to file
 
-		$fp = fopen('ebayOrder.csv', 'w');
+		$fp = fopen($csvPath, 'w');
 
 		for ($i = 0; $i < count($list); $i++) {
 			fputcsv($fp, $list[$i], ';');
