@@ -16,7 +16,7 @@
 			'Verkaufspreis', 'Inklusive Mehrwertsteuersatz', 'Verpackung und Versand', 'Versicherung', 'Gesamtpreis', 
 			'Zahlungsmethode', 'PayPal Transaktions-ID', 'Rechnungsnummer', 'Rechnungsdatum', 'Verkaufsdatum', 'Kaufabwicklungsdatum', 'Bezahldatum', 'Versanddatum', 
 			'Versandservice', 'Abgegebene Bewertungen', 'Erhaltene Bewertungen', 'Notizzettel', 'Bestandseinheit', 'Private Notizen', 'Produktkennung-Typ', 'Produktkennung-Wert', 'Produktkennung-Wert 2', 
-			'Variantendetails', 'Produktreferenznummer', 'Verwendungszweck', 'Sendungsnummer', 'eBay Plus', 'Nebenkosten'));
+			'Variantendetails', 'Produktreferenznummer', 'Verwendungszweck', 'Sendungsnummer', 'eBay Plus', 'Nebenkosten', 'Land', 'Telefon'));
 
 
 	if ($entries == 0) {
@@ -45,6 +45,16 @@
 						$price = $transaction->TransactionPrice;
 						$fees = $externalTransaction->FeeOrCreditAmount;
 						$paymentID = $order->ExternalTransaction->ExternalTransactionID;
+						
+						//For users who put their street number in the second address field
+						if(strlen($shippingAddress->Street2) < 5){
+							$street01 = $shippingAddress->Street1 . " " . $shippingAddress->Street2;
+							$street02 = "";
+						}
+						else{
+							$street01 = $shippingAddress->Street1;
+							$street02 = $shippingAddress->Street2;
+						}
 						//Packs with multiple items?
 						if(strpos(strtolower($title), 'er pack')){
 							$strpostitle = substr($title,0,strpos(strtolower($title),"er pack")); //Cut everything after "er Pack"
@@ -66,13 +76,13 @@
 							$paymentID = "";
 						}
 											
-						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $shippingAddress->Street1, $shippingAddress->Street2, 
+						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $street01, $street02, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
 						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
 						$order->CheckoutStatus->PaymentMethod, $paymentID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, $checkoutmessage, '', '', '',
-						'', '', '', '', 'Nein', $fees, $shippingAddress->Country));
+						'', '', '', '', 'Nein', $fees, $shippingAddress->Country, $shippingAddress->Phone));
                     }
                 }
         }
