@@ -43,7 +43,7 @@
 						$title = $transaction->Item->Title;
 						$quantity = $transaction->QuantityPurchased;
 						$price = $transaction->TransactionPrice;
-						$fees = $externalTransaction->FeeOrCreditAmount;
+						$fees = (doubleval($price) + doubleval($ShippingServiceSelected->ShippingServiceCost)) / doubleval($quantity) * 0.15;
 						$paymentID = $order->ExternalTransaction->ExternalTransactionID;
 						
 						//For users who put their street number in the second address field
@@ -64,12 +64,14 @@
 							}	
 							$quantity *= intval($strpostitle); //Get "real" quantity
 							$price = doubleval($price) / doubleval($strpostitle); //Get "real" price
-							$fees = (doubleval($fees)-0.25) / doubleval($strpostitle) + 0.01; //Get "real" fees
+							$fees = $fees / doubleval($strpostitle) + 0.01; //Get "real" fees
 						}
+						/*
 						if($quantity > 1 || $i == 1){
 							$fees = 0;
 						}
 						$i = 1; //Fees should only be imported once
+						*/
 						
 						//On some transactions the paymentID gets set to "SIS". We don't want this.
 						if($paymentID == "SIS"){
