@@ -10,9 +10,9 @@
 	//Stores all information
 	$list = array ( );
 	//Headline
-	array_push($list, array('Verkaufsprotokollnummer', 'Mitgliedsname', 'Vollständiger Name des Käufers', 'E-Mail des Käufers', 'Käuferadresse 1', 'Käuferadresse 2', 
-			'Ort des Käufers', 'Staat des Käufers', 'Postleitzahl des Käufers', 'Land des Käufers', 
-			'Bestellnummer', 'Artikelnummer', 'Transaktions-ID', 'Artikelbezeichnung', 'Stückzahl', 
+	array_push($list, array('Verkaufsprotokollnummer', 'Mitgliedsname', 'Vollstaendiger Name des Kaeufers', 'E-Mail des Kaeufers', 'Kaeuferadresse 1', 'Kaeuferadresse 2', 
+			'Ort des KÂufers', 'Staat des Kaeufers', 'Postleitzahl des Kaeufers', 'Land des Kaeufers', 
+			'Bestellnummer', 'Artikelnummer', 'Transaktions-ID', 'Artikelbezeichnung', 'Stueckzahl', 
 			'Verkaufspreis', 'Inklusive Mehrwertsteuersatz', 'Verpackung und Versand', 'Versicherung', 'Gesamtpreis', 
 			'Zahlungsmethode', 'PayPal Transaktions-ID', 'Rechnungsnummer', 'Rechnungsdatum', 'Verkaufsdatum', 'Kaufabwicklungsdatum', 'Bezahldatum', 'Versanddatum', 
 			'Versandservice', 'Abgegebene Bewertungen', 'Erhaltene Bewertungen', 'Notizzettel', 'Bestandseinheit', 'Private Notizen', 'Produktkennung-Typ', 'Produktkennung-Wert', 'Produktkennung-Wert 2', 
