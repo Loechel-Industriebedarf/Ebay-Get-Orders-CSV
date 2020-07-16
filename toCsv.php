@@ -11,7 +11,7 @@
 	$list = array ( );
 	//Headline
 	array_push($list, array('Verkaufsprotokollnummer', 'Mitgliedsname', 'Vollstaendiger Name des Kaeufers', 'E-Mail des Kaeufers', 'Kaeuferadresse 1', 'Kaeuferadresse 2', 
-			'Ort des Kufers', 'Staat des Kaeufers', 'Postleitzahl des Kaeufers', 'Land des Kaeufers', 
+			'Ort des Kaeufers', 'Staat des Kaeufers', 'Postleitzahl des Kaeufers', 'Land des Kaeufers', 
 			'Bestellnummer', 'Artikelnummer', 'Transaktions-ID', 'Artikelbezeichnung', 'Stueckzahl', 
 			'Verkaufspreis', 'Inklusive Mehrwertsteuersatz', 'Verpackung und Versand', 'Versicherung', 'Gesamtpreis', 
 			'Zahlungsmethode', 'PayPal Transaktions-ID', 'Rechnungsnummer', 'Rechnungsdatum', 'Verkaufsdatum', 'Kaufabwicklungsdatum', 'Bezahldatum', 'Versanddatum', 
