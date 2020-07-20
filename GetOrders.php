@@ -1,5 +1,5 @@
 <?php
-/*  © 2013 eBay Inc., All Rights Reserved */ 
+/*  ï¿½ 2013 eBay Inc., All Rights Reserved */ 
 /* Licensed under CDDL 1.0 -  http://opensource.org/licenses/cddl1.php */
 ?>
 <?php require_once('get-common/keys.php')  //include keys file for auth token and other credentials ?>
