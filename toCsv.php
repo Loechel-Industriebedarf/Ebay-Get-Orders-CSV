@@ -43,7 +43,7 @@
 						$title = $transaction->Item->Title;
 						$quantity = $transaction->QuantityPurchased;
 						$price = $transaction->TransactionPrice;
-						$fees = (doubleval($price) + doubleval($ShippingServiceSelected->ShippingServiceCost)) / doubleval($quantity) * 0.15;
+						$fees = (doubleval($price) + doubleval($ShippingServiceSelected->ShippingServiceCost)) / doubleval($quantity) * 0.11 + 0.35 / doubleval($quantity);
 						$paymentID = $order->ExternalTransaction->ExternalTransactionID;
 						
 						//For users who put their street number in the second address field
