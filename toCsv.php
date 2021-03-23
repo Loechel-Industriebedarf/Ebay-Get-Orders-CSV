@@ -10,9 +10,9 @@
 	//Stores all information
 	$list = array ( );
 	//Headline
-	array_push($list, array('Verkaufsprotokollnummer', 'Mitgliedsname', 'Vollstaendiger Name des Kaeufers', 'E-Mail des Kaeufers', 'Kaeuferadresse 1', 'Kaeuferadresse 2', 
-			'Ort des Kaeufers', 'Staat des Kaeufers', 'Postleitzahl des Kaeufers', 'Land des Kaeufers', 
-			'Bestellnummer', 'Artikelnummer', 'Transaktions-ID', 'Artikelbezeichnung', 'Stueckzahl', 
+	array_push($list, array('Verkaufsprotokollnummer', 'Mitgliedsname', 'Vollst�ndiger Name des K�ufers', 'E-Mail des K�ufers', 'K�uferadresse 1', 'K�uferadresse 2', 
+			'Ort des K�ufers', 'Staat des K�ufers', 'Postleitzahl des K�ufers', 'Land des K�ufers', 
+			'Bestellnummer', 'Artikelnummer', 'Transaktions-ID', 'Artikelbezeichnung', 'St�ckzahl', 
 			'Verkaufspreis', 'Inklusive Mehrwertsteuersatz', 'Verpackung und Versand', 'Versicherung', 'Gesamtpreis', 
 			'Zahlungsmethode', 'PayPal Transaktions-ID', 'Rechnungsnummer', 'Rechnungsdatum', 'Verkaufsdatum', 'Kaufabwicklungsdatum', 'Bezahldatum', 'Versanddatum', 
 			'Versandservice', 'Abgegebene Bewertungen', 'Erhaltene Bewertungen', 'Notizzettel', 'Bestandseinheit', 'Private Notizen', 'Produktkennung-Typ', 'Produktkennung-Wert', 'Produktkennung-Wert 2', 
@@ -24,11 +24,17 @@
 	}
 	else{
 	$orders = $response->OrderArray->Order;
-	
+
     if ($orders != null) {
 		echo $now." New orders get parsed.";
 		
         foreach ($orders as $order) {
+			/*
+			echo "<pre>";
+			var_dump($order);
+			echo "</pre>";
+			*/
+
 			$shippingAddress = $order->ShippingAddress;
 			$ShippingServiceSelected = $order->ShippingServiceSelected;
 			$externalTransaction = $order->ExternalTransaction;
@@ -43,7 +49,7 @@
 						$title = $transaction->Item->Title;
 						$quantity = $transaction->QuantityPurchased;
 						$price = $transaction->TransactionPrice;
-						$fees = (doubleval($price) + doubleval($ShippingServiceSelected->ShippingServiceCost)) / doubleval($quantity) * 0.11 + 0.35 / doubleval($quantity);
+						$fees = (doubleval($price) + doubleval($ShippingServiceSelected->ShippingServiceCost)) / doubleval($quantity) * 0.11;
 						$paymentID = $order->ExternalTransaction->ExternalTransactionID;
 						
 						//For users who put their street number in the second address field
@@ -77,8 +83,16 @@
 						if($paymentID == "SIS"){
 							$paymentID = "";
 						}
-											
-						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $transaction->Buyer->Email, $street01, $street02, 
+
+						//Check if the customer has a "StaticAlias" Address
+						if(!isset($transaction->Buyer->StaticAlias) || $transaction->Buyer->StaticAlias == "" || $transaction->Buyer->StaticAlias == null){
+							$email = $transaction->Buyer->Email;
+						}
+						else{
+							$email = $transaction->Buyer->StaticAlias;
+						}
+
+						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $email, $street01, $street02, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
 						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
