@@ -98,7 +98,7 @@
 						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
 						$order->CheckoutStatus->PaymentMethod, $paymentID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, $checkoutmessage, '', '', '',
-						'', '', '', '', 'Nein', $fees, $shippingAddress->Country, $shippingAddress->Phone, $CreateTimeFrom,$CreateTimeTo, $now));
+						'', '', '', '', 'Nein', $fees, $shippingAddress->Country, $shippingAddress->Phone, $CreateTimeFrom, $CreateTimeTo, $now));
                     }
                 }
         }
