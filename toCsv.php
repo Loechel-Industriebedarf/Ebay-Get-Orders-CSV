@@ -16,7 +16,7 @@
 			'Verkaufspreis', 'Inklusive Mehrwertsteuersatz', 'Verpackung und Versand', 'Versicherung', 'Gesamtpreis', 
 			'Zahlungsmethode', 'PayPal Transaktions-ID', 'Rechnungsnummer', 'Rechnungsdatum', 'Verkaufsdatum', 'Kaufabwicklungsdatum', 'Bezahldatum', 'Versanddatum', 
 			'Versandservice', 'Abgegebene Bewertungen', 'Erhaltene Bewertungen', 'Notizzettel', 'Bestandseinheit', 'Private Notizen', 'Produktkennung-Typ', 'Produktkennung-Wert', 'Produktkennung-Wert 2', 
-			'Variantendetails', 'Produktreferenznummer', 'Verwendungszweck', 'Sendungsnummer', 'eBay Plus', 'Nebenkosten', 'Land', 'Telefon'));
+			'Variantendetails', 'Produktreferenznummer', 'Verwendungszweck', 'Sendungsnummer', 'eBay Plus', 'Nebenkosten', 'Land', 'Telefon', 'From', 'To', 'Now'));
 
 
 	if ($entries == 0) {
@@ -98,7 +98,7 @@
 						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
 						$order->CheckoutStatus->PaymentMethod, $paymentID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, $checkoutmessage, '', '', '',
-						'', '', '', '', 'Nein', $fees, $shippingAddress->Country, $shippingAddress->Phone));
+						'', '', '', '', 'Nein', $fees, $shippingAddress->Country, $shippingAddress->Phone, $CreateTimeFrom,$CreateTimeTo, $now));
                     }
                 }
         }
@@ -108,18 +108,18 @@
 	
 		//Write the transactions to file
 
-		$fp = fopen($csvPath, 'w');
+		$csvWriter = fopen($csvPath, 'w');
 
 		for ($i = 0; $i < count($list); $i++) {
-			fputcsv($fp, $list[$i], ';');
+			fputcsv($csvWriter, $list[$i], ';');
 		}
 
-		fclose($fp);
+		fclose($csvWriter);
 		
 		
-		$fp = fopen('last.txt', 'w+');
-		fwrite($fp, $CreateTimeTo);
-		fclose($fp);
+		$lastWriter = fopen('last.txt', 'w+');
+		fwrite($lastWriter, $CreateTimeTo);
+		fclose($lastWriter);
 	}
 		
 ?>
