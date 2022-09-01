@@ -12,20 +12,30 @@ $siteID = 77;
 //the call being made:
 $verb = 'GetOrders';
 
+date_default_timezone_set('Europe/London');
+
 //Time with respect to GMT -> Ebay seems to work in GMT timezone. So, yeah.
 //by default retreive orders in last 30 minutes
 $CreateTimeFrom = file_get_contents('last.txt');
 //$CreateTimeFrom = "2021-08-30T00:00:00";
 
-$CreateTimeToDT = DateTime::createFromFormat('U.u', microtime(true));
-$CreateTimeTo = $CreateTimeToDT->format("Y-m-d\TH:i:s.v");
+//2 minutes in the past
+/* 
+https://developer.ebay.com/devzone/xml/docs/reference/ebay/getorders.html : 
+"Note: If a GetOrders call is made within a few seconds after the creation of a multiple line item order, 
+the caller runs the risk of retrieving orders that are in an inconsistent state, since the order consolidation 
+involved in a multiple line item order may not have been completed. For this reason, it is recommended that 
+sellers include the CreateTimeTo field in the call, and set its value to: Current Time - 2 minutes. "
+*/
+$CreateTimeToDT = DateTime::createFromFormat('U.u', microtime(true) - 60 * 2);
+$CreateTimeTo = $CreateTimeToDT->format("Y-m-d\TH:i:s.uZ");
 //$CreateTimeTo = "2021-08-30T12:00:00";
 
 //$now = gmdate("Y-m-d\TH:i:s", time() + 7200);
 $now = gmdate("Y-m-d\TH:i:s", time() + 7200);
 
 
-echo $CreateTimeFrom . '<br>' . $CreateTimeTo . '<br>' . $now . '<br><br>';
+//echo $CreateTimeFrom . '<br>' . $CreateTimeTo . '<br>' . $now . '<br><br>';
 
 
 //If you want to hard code From and To timings, Follow the below format in "GMT".

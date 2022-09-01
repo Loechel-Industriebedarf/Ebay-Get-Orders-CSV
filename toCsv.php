@@ -116,9 +116,12 @@
 
 		fclose($csvWriter);
 		
+		$CreateTimeToDT->modify("+1 second");
+		$CreateTimeToAddOneSec = $CreateTimeToDT->format("Y-m-d\TH:i:s.0000000Z");
+		
 		
 		$lastWriter = fopen('last.txt', 'w+');
-		fwrite($lastWriter, $CreateTimeTo);
+		fwrite($lastWriter, $CreateTimeToAddOneSec);
 		fclose($lastWriter);
 	}
 		
