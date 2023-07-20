@@ -27,12 +27,15 @@ the caller runs the risk of retrieving orders that are in an inconsistent state,
 involved in a multiple line item order may not have been completed. For this reason, it is recommended that 
 sellers include the CreateTimeTo field in the call, and set its value to: Current Time - 2 minutes. "
 */
-$CreateTimeToDT = DateTime::createFromFormat('U.u', microtime(true) - 60 * 2);
-$CreateTimeTo = $CreateTimeToDT->format("Y-m-d\TH:i:s.uZ");
-//$CreateTimeTo = "2021-08-30T12:00:00";
+$CreateTimeToDT = DateTime::createFromFormat('U.u', microtime(true) - 60 * 10);
+$CreateTimeTo = $CreateTimeToDT->format("Y-m-d\TH:i:s.999\Z");
+
+$CreateTimeFrom = "2023-07-19T08:26:24.000Z";
+$CreateTimeTo = "2023-07-19T08:36:32.825Z";
 
 //$now = gmdate("Y-m-d\TH:i:s", time() + 7200);
 $now = gmdate("Y-m-d\TH:i:s", time() + 7200);
+
 
 
 //echo $CreateTimeFrom . '<br>' . $CreateTimeTo . '<br>' . $now . '<br><br>';

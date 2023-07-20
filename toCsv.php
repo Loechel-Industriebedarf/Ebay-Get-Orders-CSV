@@ -10,11 +10,11 @@
 	//Stores all information
 	$list = array ( );
 	//Headline
-	array_push($list, array('Verkaufsprotokollnummer', 'Mitgliedsname', 'Vollst�ndiger Name des K�ufers', 'E-Mail des K�ufers', 'K�uferadresse 1', 'K�uferadresse 2', 
-			'Ort des K�ufers', 'Staat des K�ufers', 'Postleitzahl des K�ufers', 'Land des K�ufers', 
-			'Bestellnummer', 'Artikelnummer', 'Transaktions-ID', 'Artikelbezeichnung', 'St�ckzahl', 
+	array_push($list, array('Verkaufsprotokollnummer', 'Mitgliedsname', 'Vollstaendiger Name des Kaeufers', 'E-Mail des Kaeufers', 'Kaeuferadresse 1', 'Kaeuferadresse 2', 
+			'Ort des Kaeufers', 'Staat des Kaeufers', 'Postleitzahl des Kaeufers', 'Land des Kaeufers', 
+			'Bestellnummer', 'Artikelnummer', 'Transaktions-ID', 'Artikelbezeichnung', 'Stueckzahl', 
 			'Verkaufspreis', 'Inklusive Mehrwertsteuersatz', 'Verpackung und Versand', 'Versicherung', 'Gesamtpreis', 
-			'Zahlungsmethode', 'PayPal Transaktions-ID', 'Rechnungsnummer', 'Rechnungsdatum', 'Verkaufsdatum', 'Kaufabwicklungsdatum', 'Bezahldatum', 'Versanddatum', 
+			'Zahlungsmethode', 'PayPal Transaktions-ID', 'Rechnungsnummer', 'CreatedTime', 'LastModifiedTime', 'ExternalTransactionTime', 'PaymentTime', 'Versanddatum', 
 			'Versandservice', 'Abgegebene Bewertungen', 'Erhaltene Bewertungen', 'Notizzettel', 'Bestandseinheit', 'Private Notizen', 'Produktkennung-Typ', 'Produktkennung-Wert', 'Produktkennung-Wert 2', 
 			'Variantendetails', 'Produktreferenznummer', 'Verwendungszweck', 'Sendungsnummer', 'eBay Plus', 'Nebenkosten', 'Land', 'Telefon', 'From', 'To', 'Now'));
 
@@ -26,7 +26,7 @@
 	$orders = $response->OrderArray->Order;
 
     if ($orders != null) {
-		echo $now." New orders get parsed.";
+		echo $now. " - " . sizeof($orders) . " new orders get parsed. ( " . $CreateTimeFrom . " to " . $CreateTimeTo . " )";
 		
         foreach ($orders as $order) {
 			/*
@@ -34,7 +34,7 @@
 			var_dump($order);
 			echo "</pre>";
 			*/
-
+			
 			$shippingAddress = $order->ShippingAddress;
 			$ShippingServiceSelected = $order->ShippingServiceSelected;
 			$externalTransaction = $order->ExternalTransaction;
@@ -84,6 +84,7 @@
 							$paymentID = "";
 						}
 
+						/*
 						//Check if the customer has a "StaticAlias" Address
 						if(!isset($transaction->Buyer->StaticAlias) || $transaction->Buyer->StaticAlias == "" || $transaction->Buyer->StaticAlias == null){
 							$email = $transaction->Buyer->Email;
@@ -91,12 +92,16 @@
 						else{
 							$email = $transaction->Buyer->StaticAlias;
 						}
+						*/
+						
+						$email = $transaction->Buyer->Email;
 
 						array_push($list, array($order->OrderID, $order->BuyerUserID, $shippingAddress->Name, $email, $street01, $street02, 
 						$shippingAddress->CityName, $shippingAddress->StateOrProvince, $shippingAddress->PostalCode, $shippingAddress->CountryName,
 						$transaction->OrderLineItemID, $transaction->Item->SKU, $transaction->TransactionID, $transaction->Item->Title, $quantity,
 						$price, $order->ShippingDetails->SalesTax->SalesTaxAmount, $ShippingServiceSelected->ShippingServiceCost, "0,00", $order->AmountPaid,
-						$order->CheckoutStatus->PaymentMethod, $paymentID, '', '', $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, $externalTransaction->ExternalTransactionTime, '', 
+						$order->CheckoutStatus->PaymentMethod, $paymentID, '',
+						$order->CreatedTime, $order->CheckoutStatus->LastModifiedTime, $externalTransaction->ExternalTransactionTime, $order->PaidTime, '', 
 						$ShippingServiceSelected->ShippingService, 'Nein', '', '', $transaction->Item->SKU, $checkoutmessage, '', '', '',
 						'', '', '', '', 'Nein', $fees, $shippingAddress->Country, $shippingAddress->Phone, $CreateTimeFrom, $CreateTimeTo, $now));
                     }
@@ -117,7 +122,8 @@
 		fclose($csvWriter);
 		
 		$CreateTimeToDT->modify("+1 second");
-		$CreateTimeToAddOneSec = $CreateTimeToDT->format("Y-m-d\TH:i:s.0000000Z");
+		$CreateTimeToAddOneSec = $CreateTimeToDT->format("Y-m-d\TH:i:s.000\Z");
+		//var_dump($CreateTimeToAddOneSec);
 		
 		
 		$lastWriter = fopen('last.txt', 'w+');
